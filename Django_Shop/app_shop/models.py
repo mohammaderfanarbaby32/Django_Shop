@@ -13,14 +13,20 @@ class Customers(models.Model):
     postal_Code = models.TextField(max_length=20)
 
 #------------------------------------------------------------------------------
+#Categories-----------------------------------------------------------------
+class Categories(models.Model):
+    category_id = models.AutoField(primary_key=True)    
+    category_name = models.TextField(max_length=50)
+    category_description = models.TextField(max_length=50)
+    category_image = models.TextField(max_length=50)
 #Products field----------------------------------------------------------------
 class Products(models.Model):
     Product_id = models.AutoField(primary_key=True)
-    Product_name = models.TextField(max_length=50)
+    Product_name = models.CharField(max_length=50)
     description = models.TextField(max_length=50)   
     price = models.DecimalField(decimal_places=2, max_digits=10)
     image = models.TextField(max_length=200)
-    category_id = models.TextField(max_length=50)
+    category_id = models.ForeignKey(Categories,on_delete=models.CASCADE)
 
 #------------------------------------------------------------------------------
 #Orders field-------------------------------------------------------------------
@@ -46,9 +52,3 @@ class Order_details(models.Model):
     item_status = models.TextField(max_length=50)
 
 #--------------------------------------------------------------------------
-#Categories-----------------------------------------------------------------
-class Categories(models.Model):
-    category_id = models.AutoField(primary_key=True)    
-    category_name = models.TextField(max_length=50)
-    category_description = models.TextField(max_length=50)
-    category_image = models.TextField(max_length=50)
