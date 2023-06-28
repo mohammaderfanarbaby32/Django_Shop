@@ -36,7 +36,7 @@ class Orders(models.Model):
     Customer_id = models.ForeignKey(Customers,on_delete=models.CASCADE)
     Order_date = models.TextField(max_length=50)
     total_amount = models.TextField(max_length=50)   
-    payment_type = models.DecimalField(decimal_places=2, max_digits=10)
+    payment_type = models.DecimalField(decimal_places=8, max_digits=10)
     state = models.TextField(max_length=200)
 
 #-------------------------------------------------------------------------------
@@ -46,8 +46,8 @@ class Order_details(models.Model):
     Product_id = models.ForeignKey(Products,on_delete=models.CASCADE)
     Order_name = models.TextField(max_length=50)
     quantity = models.TextField(max_length=50)   
-    item_notes = models.DecimalField(decimal_places=2, max_digits=10)
-    item_price = models.DecimalField(decimal_places=2, max_digits=10)
+    item_notes = models.DecimalField(decimal_places=8, max_digits=10)
+    item_price = models.DecimalField(decimal_places=8, max_digits=10)
     item_discount = models.TextField(max_length=50)
     item_total = models.TextField(max_length=50)
     item_status = models.TextField(max_length=50)
@@ -59,4 +59,10 @@ class admin(models.Model):
     Lastname = models.TextField(max_length=50)
     age = models.TextField(max_length=50)
     password = models.TextField(max_length=20)
-# python manage.py migrate
+# python manage.py migrate---------------------------------------------------------
+#Cart---------------------------------------------------------------------------------------------------------
+class Cart(models.Model):
+    Cart_id = models.AutoField(max_length=50,primary_key=True)
+    Customer_id = models.ForeignKey(Customers,on_delete=models.CASCADE)
+    Product_id = models.ForeignKey(Products,on_delete=models.CASCADE)
+    Number = models.TextField(max_length=5)

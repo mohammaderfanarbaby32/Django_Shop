@@ -34,4 +34,26 @@ urlpatterns = [
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------     
      path('Login_Customer/<str:first_name>/<str:last_name>/<str:email>/', views.Login_Customer, name='Login_Customer'),
      path('Login_admin/<str:Usname>/<str:password>/', views.Login_admin, name='Login_admin'),      
-    ]
+#------------------------------------------------------------------------------------------------------------------------
+#Customers can browse products by category and view details of each product-----------------------------------
+     path('products_by_category/<str:category_id_id>/', views.products_by_category, name='products_by_category'),
+#-------------------------------------------------------------------------------------------------------------
+#Cart_C-------------------------------------------------------------------------------------------------
+path('Cart_C/<str:Customer_id_id>/<str:Product_id_id>/<str:Number>/', views.Cart_C , name='Cart_C'),
+#-------------------------------------------------------------------------------------------------------
+#Cart_D-----------------------------------------------------
+path('Cart_D/<str:Cart_id>/', views.Cart_D , name='Cart_D'), 
+#-----------------------------------------------------------
+#Cart_U-----------------------------------------------------------------------------------------------------------
+path('Cart_U/<str:Customer_id_id>/<str:Product_id_id>/<str:Number>/<str:Cart_id>/', views.Cart_U , name='Cart_U'),
+#------------------------------------------------------------------------------------------------------------------
+#Cart_ALL--------------------------------------------
+path('Cart_ALL/', views.Cart_ALL , name='Cart_ALL'),
+#----------------------------------------------------
+#Empty_the_shopping_cart--------------------------------------------
+path('Empty_the_shopping_cart/<str:Customer_id_id>/<str:Cart_id>/<str:quantity>/<str:item_notes>/<str:Product_id_id>/<str:Order_name>/<str:item_price>/<str:item_discount>/<str:item_total>/<str:item_status>/<str:Order_date>/<str:total_amount>/<str:payment_type>/<str:state>/<str:Order_id_id>/', views.Empty_the_shopping_cart , name='Empty_the_shopping_cart'),
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#order_history_and_order_status------------------------------------------------------------------------------------------------------------
+path('order_history_and_order_status/<str:Customer_id_id>/', views.order_history_and_order_status, name='order_history_and_order_status'),
+#The_end-------------------------------------------------------------------------------------------------------------------------------------------
+    ]                                                                     

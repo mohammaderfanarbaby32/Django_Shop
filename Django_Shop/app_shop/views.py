@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Customers, Products,Categories,Orders,Order_details,admin
+from .models import Customers, Products,Categories,Orders,Order_details,admin,Cart
 from django.http import HttpResponse, JsonResponse
 import json
 from django.db import IntegrityError
@@ -254,3 +254,94 @@ def Login_admin(request, **kwargs):
         return HttpResponse("OK")
     except admin.DoesNotExist:
         return HttpResponse("No")
+#-----------------------------------------------------------------------------------------------------------
+#Customers can browse products by category and view details of each product-------------------------------------------------------------------------------------------------
+def products_by_category(request, category_id_id):
+
+    try:
+        words = Products.objects.filter(category_id_id=category_id_id) # فیلتر کردن بر اساس first_name
+        word_list = []
+        for word in words:
+            word_dict = {'Product_name': word.Product_name, 'description': word.description,'price':word.price,'image': word.image}
+            word_list.append(word_dict)
+        return JsonResponse(word_list, safe=False)
+    except Products.DoesNotExist:
+        return HttpResponse(status=404) 
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#Cart_C------------------------------------------------------------------------------------------------
+def Cart_C(request, Customer_id_id, Product_id_id,Number):
+  try:
+      new_word = Cart(Customer_id_id=Customer_id_id,Product_id_id=Product_id_id,Number=Number)
+      new_word.save()
+      return HttpResponse('Product to id'+Product_id_id+' added successfully!')
+  except IntegrityError as e:
+    if 'FOREIGN KEY constraint failed' in str(e):
+        return HttpResponse("The category you selected <b>does not exist</b>")
+    else:
+        # handle other types of IntegrityError or re-raise the exception
+        pass
+#-------------------------------------------------------------------------------------------------
+#Cart_D------------------------------------------------------------------------------------------------------------------------------
+def Cart_D(request, Cart_id):
+    categories = Cart.objects.filter(Cart_id=Cart_id)
+    for category in categories:
+        category.delete()
+    return HttpResponse('All ' + str(len(categories)) + ' categories with the name "' + Cart_id + '" were successfully deleted')
+#------------------------------------------------------------------------------------------------------------------------------------
+#Cart_U----------------------------------------------------------
+def Cart_U(request,Customer_id_id,Product_id_id,Number,Cart_id):
+    order = Cart.objects.get(Cart_id=Cart_id)
+    order.Customer_id_id = Customer_id_id
+    order.Product_id_id = Product_id_id
+    order.Number = Number
+    order.save()
+    return HttpResponse(f"{Cart_id} ❤️Updated successfully!❤️")
+#----------------------------------------------------------------
+#Cart_ALL-----------------------------------------------------------------------------------------------------------------
+def Cart_ALL(request):
+    words = Cart.objects.all()
+    word_list = []
+    for word in words:
+        word_dict = {'Cart_id': word.Cart_id, 'Product_id_id': word.Product_id_id,'Customer_id_id': word.Customer_id_id}
+        word_list.append(word_dict)
+    return JsonResponse(word_list, safe=False)
+#------------------------------------------------------------------------------------------------------------------------
+#Cart_ALL----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+def Empty_the_shopping_cart(request, Customer_id_id, Product_id_id, Cart_id, Order_date, total_amount, payment_type, state, Order_name, quantity, item_notes, item_price, item_discount, item_total, item_status, Order_id_id):
+    categories = Cart.objects.filter(Cart_id=Cart_id)
+    categories.delete()
+
+    try:
+        new_order = Orders(Customer_id_id=Customer_id_id, Order_date=Order_date, total_amount=total_amount, payment_type=payment_type, state=state)
+        new_order.save()
+        return HttpResponse('Order with total amount ' + str(total_amount) + ' added successfully!')
+    except IntegrityError as e:
+        if 'FOREIGN KEY constraint failed' in str(e):
+            return HttpResponse("The category you selected <b>does not exist</b>")
+        else:
+            # handle other types of IntegrityError or re-raise the exception
+            pass
+    
+    try:
+        new_order_details = Order_details(quantity=quantity, item_notes=item_notes, item_price=item_price, item_status=item_status, item_total=item_total, item_discount=item_discount, Order_id_id=Order_id_id, Product_id_id=Product_id_id, Order_name=Order_name)
+        new_order_details.save()
+        return HttpResponse('Order details with name ' + str(Order_name) + ' added successfully!')
+    except IntegrityError as e:
+        if 'FOREIGN KEY constraint failed' in str(e):
+            return HttpResponse("The category you selected <b>does not exist</b>")
+        else:
+            # handle other types of IntegrityError or re-raise the exception
+            pass
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#order_history_and_order_status----------------------------------------
+def order_history_and_order_status(request, Customer_id_id):
+    try:
+        word = Orders.objects.filter(Customer_id_id=Customer_id_id)
+        mylist = []
+        for a in word:
+          word_dict = {'Order_date': a.Order_date,'state': a.state}
+          mylist.append(word_dict)
+        return JsonResponse(mylist , safe=False)
+    except Products.DoesNotExist:
+        return HttpResponse(status=404)    
+#-----------------------------------------------------------------------
