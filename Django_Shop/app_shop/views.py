@@ -3,28 +3,23 @@ from .models import Customers, Products,Categories,Orders,Order_details,admin,Ca
 from django.http import HttpResponse, JsonResponse
 import json
 from django.db import IntegrityError
-# Show all field---------------------------------------------
-def W(request):
-    words = Customers.objects.all()
-    word_list = []
-    for word in words:
-        word_dict = {'name': word.name, 'age': word.age}
-        word_list.append(word_dict)
-    return JsonResponse(word_list, safe=False)
-
 # ------------------------------------------------------------
 # Customers Edit-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 def serch_field_Customer(request , first_name):
-    try:
-        words = Customers.objects.filter(first_name=first_name) # فیلتر کردن بر اساس first_name
-        word_list = []
-        for word in words:
-            word_dict = {'first_name': word.first_name, 'last_name': word.last_name,'email':word.email,'phone number': word.phone_number, 'Address': word.Address,'City':word.City, 'State': word.state,'postal_Code':word.postal_Code }
-            word_list.append(word_dict)
-        return JsonResponse(word_list, safe=False)
-    except Customers.DoesNotExist:
-        return HttpResponse(status=404)
+    if first_name == '*':
+        words = Customers.objects.all()
+        return JsonResponse(list(words.values()), safe=False)
+    else :
+      try:
+          words = Customers.objects.filter(first_name=first_name) # فیلتر کردن بر اساس first_name
+          word_list = []
+          for word in words:
+              word_dict = {'first_name': word.first_name, 'last_name': word.last_name,'email':word.email,'phone number': word.phone_number, 'Address': word.Address,'City':word.City, 'State': word.state,'postal_Code':word.postal_Code }
+              word_list.append(word_dict)
+          return JsonResponse(word_list, safe=False)
+      except Customers.DoesNotExist:
+          return HttpResponse(status=404)
 
 
 
@@ -60,7 +55,9 @@ def Update_field_Customer(request,first_name,last_name,email,phone_number,Addres
 # Products Edit-----------------------------------------------------------------------------------------------------------------------------------------
 
 def serch_field_Products(request, Product_name):
-
+    if Product_name == '*':
+        words = Products.objects.all()
+        return JsonResponse(list(words.values()), safe=False)
     try:
         words = Products.objects.filter(Product_name=Product_name) # فیلتر کردن بر اساس first_name
         word_list = []
@@ -93,10 +90,10 @@ def Update_field_Products(request, Product_name, description, price, image, cate
     product = Products.objects.filter(Product_name=Product_name)
     p = product.count()
     for a in product :
-        product.description = description
-        product.price = float(price)
-        product.image = image
-        product.category_id_id = category_id_id
+        a.description = description
+        a.price = float(price)
+        a.image = image
+        a.category_id_id = category_id_id
         a.save()
     return HttpResponse(f'{p}--{Product_name} Updated successfully!')
 
@@ -104,6 +101,9 @@ def Update_field_Products(request, Product_name, description, price, image, cate
 # categories Edit----------------------------------------------------------------------------------------------------------------------------------------
 
 def serch_field_Categories(request, category_name):
+    if category_name == '*':
+        words = Categories.objects.all()
+        return JsonResponse(list(words.values()), safe=False)
     try:
         words = Categories.objects.filter(category_name=category_name)
         word_list = []
@@ -151,6 +151,9 @@ def Update_field_Categories(request, category_name, category_description, catego
 # Orders Edit--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 def serch_field_Orders(request, Order_id):
+    if Order_id == '*':
+        words = Orders.objects.all()
+        return JsonResponse(list(words.values()), safe=False)
     try:
         word = Orders.objects.filter(Order_id=Order_id)
         mylist = []
@@ -192,6 +195,9 @@ def Update_field_Orders(request,Order_id, Customer_id_id, Order_date, total_amou
 # Order_details------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 def serch_field_Order_details(request, Order_name):
+    if Order_name == '*':
+        words = Order_details.objects.all()
+        return JsonResponse(list(words.values()), safe=False)
     try:
         word = Order_details.objects.filter(Order_name=Order_name)
         my = []
@@ -302,7 +308,7 @@ def Cart_ALL(request):
     words = Cart.objects.all()
     word_list = []
     for word in words:
-        word_dict = {'Cart_id': word.Cart_id, 'Product_id_id': word.Product_id_id,'Customer_id_id': word.Customer_id_id}
+        word_dict = {'Cart_id': word.Cart_id, 'Product_id_id': word.Product_id_id,'Customer_id_id': word.Customer_id_id,'Number': word.Number}
         word_list.append(word_dict)
     return JsonResponse(word_list, safe=False)
 #------------------------------------------------------------------------------------------------------------------------
@@ -314,7 +320,6 @@ def Empty_the_shopping_cart(request, Customer_id_id, Product_id_id, Cart_id, Ord
     try:
         new_order = Orders(Customer_id_id=Customer_id_id, Order_date=Order_date, total_amount=total_amount, payment_type=payment_type, state=state)
         new_order.save()
-        return HttpResponse('Order with total amount ' + str(total_amount) + ' added successfully!')
     except IntegrityError as e:
         if 'FOREIGN KEY constraint failed' in str(e):
             return HttpResponse("The category you selected <b>does not exist</b>")
@@ -331,7 +336,7 @@ def Empty_the_shopping_cart(request, Customer_id_id, Product_id_id, Cart_id, Ord
             return HttpResponse("The category you selected <b>does not exist</b>")
         else:
             # handle other types of IntegrityError or re-raise the exception
-            pass
+            print("ddddddddddddddddddddd")
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #order_history_and_order_status----------------------------------------
 def order_history_and_order_status(request, Customer_id_id):

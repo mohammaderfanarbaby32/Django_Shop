@@ -30,7 +30,7 @@ urlpatterns = [
      path('serch_field_Order_details/<str:Order_name>/', views.serch_field_Order_details, name='serch_field_Order_details'),
      path('add_field_Order_details/<str:Order_id_id>/<str:Product_id_id>/<str:Order_name>/<str:quantity>/<str:item_notes>/<str:item_price>/<str:item_discount>/<str:item_total>/<str:item_status>/', views.add_field_Order_details, name='add_field_Order_details'),
      path('delete_field_Orders_details/<str:Order_name>/', views.delete_field_Orders_details, name='delete_field_Orders_details'),
-     path('Update_field_Orders_details/<str:Order_id_id>/<str:Product_id_id>/<str:Order_name>/<str:quantity>/<str:item_notes>/<str:item_price>/<str:item_discount>/<str:item_total>/<str:item_status>/', views.Update_field_Orderss_details, name='Update_field_Orderss_details'),   
+     path('Update_field_Orders_details/<str:Order_name>/<str:Product_id_id>/<str:Order_id_id>/<str:quantity>/<str:item_notes>/<str:item_price>/<str:item_discount>/<str:item_total>/<str:item_status>/', views.Update_field_Orderss_details, name='Update_field_Orderss_details'),   
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------     
      path('Login_Customer/<str:first_name>/<str:last_name>/<str:email>/', views.Login_Customer, name='Login_Customer'),
      path('Login_admin/<str:Usname>/<str:password>/', views.Login_admin, name='Login_admin'),      
@@ -45,13 +45,13 @@ path('Cart_C/<str:Customer_id_id>/<str:Product_id_id>/<str:Number>/', views.Cart
 path('Cart_D/<str:Cart_id>/', views.Cart_D , name='Cart_D'), 
 #-----------------------------------------------------------
 #Cart_U-----------------------------------------------------------------------------------------------------------
-path('Cart_U/<str:Customer_id_id>/<str:Product_id_id>/<str:Number>/<str:Cart_id>/', views.Cart_U , name='Cart_U'),
+path('Cart_U/<str:Cart_id>/<str:Product_id_id>/<str:Number>/<str:Customer_id_id>/', views.Cart_U , name='Cart_U'),
 #------------------------------------------------------------------------------------------------------------------
 #Cart_ALL--------------------------------------------
 path('Cart_ALL/', views.Cart_ALL , name='Cart_ALL'),
 #----------------------------------------------------
 #Empty_the_shopping_cart--------------------------------------------
-path('Empty_the_shopping_cart/<str:Customer_id_id>/<str:Cart_id>/<str:quantity>/<str:item_notes>/<str:Product_id_id>/<str:Order_name>/<str:item_price>/<str:item_discount>/<str:item_total>/<str:item_status>/<str:Order_date>/<str:total_amount>/<str:payment_type>/<str:state>/<str:Order_id_id>/', views.Empty_the_shopping_cart , name='Empty_the_shopping_cart'),
+path('Empty_the_shopping_cart/<str:Cart_id>/<str:Customer_id_id>/<str:quantity>/<str:item_notes>/<str:Product_id_id>/<str:Order_name>/<str:item_price>/<str:item_discount>/<str:item_total>/<str:item_status>/<str:Order_date>/<str:total_amount>/<str:payment_type>/<str:state>/<str:Order_id_id>/', views.Empty_the_shopping_cart , name='Empty_the_shopping_cart'),
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #order_history_and_order_status------------------------------------------------------------------------------------------------------------
 path('order_history_and_order_status/<str:Customer_id_id>/', views.order_history_and_order_status, name='order_history_and_order_status'),
